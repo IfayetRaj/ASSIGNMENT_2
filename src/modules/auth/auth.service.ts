@@ -1,7 +1,7 @@
 import { pool } from "../../db";
 import bcrypt from "bcrypt";
 import { createJWTToken } from "../../utils/jwt";
-import type { ILogin, IUser } from "./auth.instance";
+import type { ILogin, IUser } from "./auth.interface";
 
 // Service function
 const createUserIntoDB = async (payload: IUser) => {
