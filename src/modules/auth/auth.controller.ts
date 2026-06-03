@@ -35,6 +35,7 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+// exporting auth controller
 export const authController = {
   signup,
   login,

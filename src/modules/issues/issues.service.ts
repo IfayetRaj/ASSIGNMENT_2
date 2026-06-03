@@ -2,7 +2,6 @@ import { pool } from "../../db";
 
 const createIssuesIntoDB = async (payload: any, reporterId: number) => {
   const { title, description, type } = payload;
-
   try {
     // create new issues in DB
     const result = await pool.query(
@@ -21,34 +20,38 @@ const getAllIssuesFromDB = async (
   type?: string,
   status?: string
 ) => {
-  let query = `SELECT * FROM issues WHERE 1=1`;
-  let values: any[] = [];
-  if (type) {
-    values.push(type);
-    query += ` AND type=$${values.length}`;
-  }
-  if (status) {
-    values.push(status);
-    query += ` AND status=$${values.length}`;
-  }
-  query +=
-    sort === "oldest"
-      ? ` ORDER BY created_at ASC`
-      : ` ORDER BY created_at DESC`;
-  const issues = await pool.query(query, values);
-  const reporterIds = [
-    ...new Set(issues.rows.map((issue: any) => issue.reporter_id)),
-  ];
-  const users = await pool.query(
-    `SELECT id,name,role FROM users
+  try {
+    let query = `SELECT * FROM issues WHERE 1=1`;
+    let values: any[] = [];
+    if (type) {
+      values.push(type);
+      query += ` AND type=$${values.length}`;
+    }
+    if (status) {
+      values.push(status);
+      query += ` AND status=$${values.length}`;
+    }
+    query +=
+      sort === "oldest"
+        ? ` ORDER BY created_at ASC`
+        : ` ORDER BY created_at DESC`;
+    const issues = await pool.query(query, values);
+    const reporterIds = [
+      ...new Set(issues.rows.map((issue: any) => issue.reporter_id)),
+    ];
+    const users = await pool.query(
+      `SELECT id,name,role FROM users
        WHERE id = ANY($1)`,
-    [reporterIds]
-  );
-  const userMap = new Map(users.rows.map((u) => [u.id, u]));
-  return issues.rows.map((issue) => ({
-    ...issue,
-    reporter: userMap.get(issue.reporter_id),
-  }));
+      [reporterIds]
+    );
+    const userMap = new Map(users.rows.map((u) => [u.id, u]));
+    return issues.rows.map((issue) => ({
+      ...issue,
+      reporter: userMap.get(issue.reporter_id),
+    }));
+  } catch (error : any) {
+    throw error.message;
+  }
 };
 
 // getting single user from DB
@@ -132,17 +135,14 @@ const updateIssue = async (issueId: number, payload: any, user: any) => {
 
 const deleteIssue = async (issueId: number) => {
   try {
-    const issueResult = await pool.query(
-        `SELECT * FROM issues WHERE id = $1`,[issueId]
-    );
-    if(!(await issueResult).rows.length){
-        throw new Error("Issue not found");
+    const issueResult = await pool.query(`SELECT * FROM issues WHERE id = $1`, [
+      issueId,
+    ]);
+    if (!(await issueResult).rows.length) {
+      throw new Error("Issue not found");
     }
-    await pool.query(
-        `DELETE FROM issues WHERE id = $1`,[issueId]
-    );
+    await pool.query(`DELETE FROM issues WHERE id = $1`, [issueId]);
     return;
-
   } catch (error: any) {
     throw error.message;
   }
