@@ -1,7 +1,5 @@
 import { pool } from "../../db";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import config from "../../config";
 import { createJWTToken } from "../../utils/jwt";
 import type { ILogin, IUser } from "./auth.instance";
 
