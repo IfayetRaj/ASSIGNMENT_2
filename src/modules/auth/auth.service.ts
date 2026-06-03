@@ -3,9 +3,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../../config";
 import { createJWTToken } from "../../utils/jwt";
+import type { ILogin, IUser } from "./auth.instance";
 
 // Service function
-const createUserIntoDB = async (payload: any) => {
+const createUserIntoDB = async (payload: IUser) => {
   const { name, email, password, role } = payload;
   const hashedPassword = await bcrypt.hash(password, 10);
   console.log(hashedPassword)
@@ -31,7 +32,7 @@ const createUserIntoDB = async (payload: any) => {
 };
 
 // login function
-const loginUserIntoDB = async (payload: any) => {
+const loginUserIntoDB = async (payload: ILogin) => {
   const { email, password } = payload;
   try {
     const user = await pool.query(`SELECT * FROM users WHERE email = $1`, [
