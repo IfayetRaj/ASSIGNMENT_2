@@ -1,0 +1,17 @@
+DevPulse API
+
+DevPulse is a role-based issue tracking and feature management REST API developed using Node.js, TypeScript, Express.js, and PostgreSQL. The application is designed to help software development teams efficiently report bugs, submit feature requests, and manage issue workflows in a structured environment. By implementing secure authentication and authorization mechanisms, DevPulse ensures that users can only perform actions permitted by their assigned roles while maintaining the integrity and security of the system.
+
+The platform supports two distinct user roles: Contributor and Maintainer. Contributors can register accounts, log into the system, create new issues, view all reported issues, and update their own issues as long as those issues remain in an open state. Maintainers have all contributor privileges in addition to administrative capabilities, including updating any issue in the system, deleting issues, and independently managing issue workflows. This role-based approach reflects real-world software team collaboration where different levels of responsibility are assigned to different team members.
+
+Authentication is implemented using JSON Web Tokens (JWT), providing a secure and scalable mechanism for user verification. User passwords are hashed using bcrypt before being stored in the database, ensuring that sensitive information is never saved in plain text. Upon successful login, the server generates a signed JWT containing essential user information such as user ID, name, and role. This token is then used to authenticate subsequent requests to protected routes throughout the application.
+
+The application follows a modular architecture that separates business logic, routing, middleware, database operations, and utility functions into dedicated modules. This structure improves maintainability, scalability, and code organization while adhering to modern backend development practices. PostgreSQL is used as the primary database, and all database interactions are performed through the native pg driver using raw SQL queries. In accordance with the project requirements, no ORM, query builder, or SQL JOIN operations are used. Instead, related data is retrieved through separate queries and combined within the application layer.
+
+DevPulse provides a complete set of RESTful endpoints for user authentication and issue management. Users can register and authenticate themselves, create new issues categorized as either bugs or feature requests, retrieve individual issues or complete issue lists, update existing issues based on role permissions, and delete issues when authorized. The system also supports filtering issues by type and status, as well as sorting results by creation date to improve usability and data retrieval efficiency.
+
+From a technical perspective, the project demonstrates the practical implementation of secure authentication, role-based authorization, modular Express architecture, PostgreSQL integration, and REST API development using TypeScript. The codebase emphasizes clean structure, separation of concerns, and adherence to backend development best practices while satisfying all assignment constraints.
+
+This project was developed as part of an academic assignment to demonstrate proficiency in backend application development, database management, authentication systems, authorization strategies, and API design principles using modern JavaScript and TypeScript technologies.
+
+Author: A.S.M. Raj Uddin
