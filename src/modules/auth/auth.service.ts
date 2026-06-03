@@ -48,7 +48,7 @@ const loginUserIntoDB = async (payload: ILogin) => {
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
-    delete user.rows[0].password;
+    delete user.rows[0].password
 
     // jwt payload 
 
